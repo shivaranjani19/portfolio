@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shivaranjani K | Portfolio</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #000000;
+            --card-bg: #0d1117;
+            --accent-color: #22d3ee; 
+            --text-main: #ffffff;
+            --text-dim: #9ca3af;
+            --border-color: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- INTRO SPLASH SCREEN --- */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        #intro-text {
+            color: var(--accent-color);
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .intro-hidden { transform: translateY(-100%); }
+
+        /* --- SCROLL REVEAL ANIMATION --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Particles Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            top: 0;
+            left: 0;
+            background-color: #000;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 8%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo { font-weight: 700; font-size: 1.1rem; letter-spacing: -0.5px; }
+        .logo span { color: var(--accent-color); }
+
+        nav { display: flex; gap: 2rem; }
+        nav a { text-decoration: none; color: var(--text-main); font-size: 0.9rem; transition: 0.3s; }
+        nav a:hover { color: var(--accent-color); }
+
+        .menu-toggle { display: none; color: var(--text-main); font-size: 1.5rem; cursor: pointer; }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 10%;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 10vw, 4.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+        }
+        .hero h1 span { color: var(--accent-color); }
+        .hero h2 { color: var(--text-dim); font-size: clamp(1.1rem, 4vw, 1.5rem); margin-bottom: 1.5rem; font-weight: 400; }
+        .hero p { max-width: 700px; color: var(--text-dim); font-size: 1rem; margin-bottom: 2.5rem; }
+
+        .hero-btns { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; justify-content: center; }
+
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .btn.secondary { border: 1px solid var(--border-color); color: var(--text-main); }
+        .btn.secondary:hover { background: #1a1a1a; }
+
+        .btn.pulse {
+            background: var(--accent-color);
+            color: #000;
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.6); }
+            70% { box-shadow: 0 0 0 12px rgba(34, 211, 238, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
+        }
+
+        /* Sections */
+        section { padding: 80px 8%; }
+        .section-title { font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 700; text-align: center; margin-bottom: 3rem; color: var(--accent-color); }
+
+        .grid-3, .grid-2 { display: grid; gap: 1.5rem; }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+        .card:hover { border-color: var(--accent-color); transform: translateY(-5px); }
+        .card h3 { color: var(--accent-color); margin-bottom: 0.8rem; font-size: 1.1rem; }
+        .card h4 { margin-bottom: 0.5rem; font-size: 1rem; }
+        .card .date { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.8rem; display: block; }
+
+        .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+        .tag { background: #1c2128; border: 1px solid var(--border-color); padding: 0.3rem 0.7rem; border-radius: 20px; font-size: 0.75rem; color: #58a6ff; }
+
+        .list-item { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 8px; list-style: none; position: relative; padding-left: 20px; }
+        .list-item::before { content: "→"; position: absolute; left: 0; color: var(--accent-color); }
+
+        /* Contact */
+        .contact-box { text-align: center; max-width: 600px; margin: 0 auto; }
+        .contact-links { margin-top: 2rem; display: flex; justify-content: center; gap: 1.5rem; font-size: 1.5rem; }
+        .contact-links a { color: var(--text-dim); transition: 0.3s; }
+        .contact-links a:hover { color: var(--accent-color); }
+
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #000;
+                flex-direction: column;
+                padding: 2rem;
+                text-align: center;
+                border-bottom: 1px solid var(--border-color);
+            }
+            nav.active { display: flex; }
+            .hero { padding-top: 120px; }
+            section { padding: 60px 5%; }
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="intro-overlay">
+    <div id="intro-text">
+        <i class="fas fa-terminal" style="opacity: 0.6; margin-right: 10px;"></i>
+        <span id="word">Hello</span>
+    </div>
+</div>
+
+<div id="particles-js"></div>
+
+<header class="navbar">
+    <div class="logo">Shivaranjani<span>.Dev</span></div>
+    <div class="menu-toggle" id="mobile-menu-btn"><i class="fas fa-bars"></i></div>
+    <nav id="nav-links">
+        <a href="#home">Home</a>
+        <a href="#about">Expertise</a>
+        <a href="#projects">Work</a>
+        <a href="#activities">Activities</a>
+    </nav>
+</header>
+
+<main>
+    <section class="hero reveal" id="home">
+        <h1>Hi, I'm <span>Shivaranjani K</span> </h1>
+        <h2>Java Developer / Software Engineer </h2>
+        <p>Aspiring Software Engineer with a strong foundation in programming and problem-solving, driven to design efficient and scalable solutions.</p>
+        
+        <div class="hero-btns">
+            <a href="Shivaranjani.K.pdf" download class="btn pulse">
+                <i class="fas fa-download" style="margin-right: 8px;"></i>Download CV
+            </a>
+            <a href="#projects" class="btn secondary">View My Projects</a>
+        </div>
+    </section>
+
+    <section id="about" class="reveal">
+        <h2 class="section-title">Technical Expertise </h2>
+        <div class="grid-3">
+            <div class="card">
+                <h3>Languages </h3>
+                <div class="tags">
+                    <span class="tag">Java</span>
+                    <span class="tag">SQL</span>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Web Technology </h3>
+                <div class="tags">
+                    <span class="tag">HTML</span>
+                    <span class="tag">CSS</span>
+                    <span class="tag">React</span>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Database </h3>
+                <div class="tags">
+                    <span class="tag">MySQL</span>
+                    <span class="tag">JDBC</span>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Certifications </h3>
+                <div class="tags">
+                    <span class="tag">Java - HackerRank </span>
+                    <span class="tag">CSS - HackerRank </span>
+                    <span class="tag">UI - Google (Coursera) </span>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Tools </h3>
+                <div class="tags">
+                    <span class="tag">Git</span>
+                    <span class="tag">Github</span>
+                    <span class="tag">IntelliJ</span>
+                    <span class="tag">Eclipse</span>
+                    <span class="tag">VS Code</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="reveal">
+        <h2 class="section-title">Featured Projects </h2>
+        <div class="grid-2">
+            <div class="card">
+                <span class="date">April 2026 - Present </span>
+                <h3>E-Commerce Website </h3>
+                <p>Developing a full-stack e-commerce application for managing product catalogs and secure online transactions.</p>
+                <div class="tags">
+                    <span class="tag">React</span>
+                    <span class="tag">MySQL </span>
+                    <span class="tag">Apache Tomcat </span>
+                </div>
+            </div>
+            <div class="card">
+                <span class="date">Jan 2026 - March 2026 </span>
+                <h3>Library Management System </h3>
+                <p>Web-based system to manage books and user transactions efficiently with secure admin authentication.</p>
+                <div class="tags">
+                    <span class="tag">Servlet </span>
+                    <span class="tag">Java</span>
+                    <span class="tag">MySQL </span>
+                    <span class="tag">JSP</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="activities" class="reveal">
+        <h2 class="section-title">Activities & Education</h2>
+        <div class="grid-2">
+            <div class="card">
+                <h3>Hackathons & Impact</h3>
+                <ul>
+                    <li class="list-item"><strong>IEEE Hackathon:</strong> Built a smart agriculture prototype using moisture/temp sensors.</li>
+                    <li class="list-item"><strong>Smart India Hackathon:</strong> Proposed a web-based drug monitoring system to track distribution.</li>
+                    <li class="list-item"><strong>Problem Solving:</strong> Strengthened Core Java and DSA through 50+ problems on LeetCode.</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Education</h3>
+                <h4>PSNA College Of Engineering & Technology</h4>
+                <span class="date">B.E Electronics & Communication Engineering (2023 - 2027) </span>
+                <br>
+                <h4>Sri Aurobindo Mira School</h4>
+                <span class="date">HSC Completed (May 2023) </span>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="reveal">
+        <div class="contact-box">
+            <h2 class="section-title">Get In Touch</h2>
+            <p>Based in <strong>Madurai, Tamilnadu </strong>. Let's build something impactful together.</p>
+            <p style="margin-top: 10px; color: var(--accent-color);">shivaranjanik1905@gmail.com </p>
+            <p style="color: var(--text-dim); font-size: 0.9rem;">(+91) 97881-55383 </p>
+            
+            <div class="contact-links">
+                <a href="https://github.com/shivaranjani19" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com/in/Shivaranjanik" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="mailto:shivaranjanik1905@gmail.com"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+    /* --- Intro Loader --- */
+    const words = ["Hello","Vanakkam", "Hola", "Namaste", "Hello World"];
+    let wordIdx = 0;
+    const wordSpan = document.getElementById('word');
+    const overlay = document.getElementById('intro-overlay');
+
+    function animateIntro() {
+        if (wordIdx < words.length) {
+            wordSpan.textContent = words[wordIdx];
+            wordIdx++;
+            setTimeout(animateIntro, 250); 
+        } else {
+            overlay.classList.add('intro-hidden');
+            document.body.style.overflow = 'auto'; 
+            // Trigger the first reveal (Hero) once intro is done
+            handleReveal();
+        }
+    }
+
+    /* --- Scroll Reveal Logic --- */
+    function handleReveal() {
+        const reveals = document.querySelectorAll('.reveal');
+        const triggerBottom = window.innerHeight * 0.85;
+
+        reveals.forEach(reveal => {
+            const revealTop = reveal.getBoundingClientRect().top;
+            if (revealTop < triggerBottom) {
+                reveal.classList.add('active');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', handleReveal);
+
+    /* --- Mobile Menu --- */
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const navLinks = document.getElementById('nav-links');
+    menuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
+
+    document.querySelectorAll('#nav-links a').forEach(link => {
+        link.addEventListener('click', () => navLinks.classList.remove('active'));
+    });
+
+    window.addEventListener('load', () => {
+        document.body.style.overflow = 'hidden'; 
+        animateIntro();
+    });
+
+    /* --- Particles --- */
+    particlesJS("particles-js", {
+        "particles": {
+            "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+            "color": { "value": "#22d3ee" },
+            "opacity": { "value": 0.3 },
+            "size": { "value": 2 },
+            "line_linked": { "enable": true, "distance": 150, "color": "#22d3ee", "opacity": 0.1, "width": 1 },
+            "move": { "enable": true, "speed": 1.5 }
+        },
+        "interactivity": { "events": { "onhover": { "enable": true, "mode": "grab" } } }
+    });
+</script>
+
+</body>
+</html>
