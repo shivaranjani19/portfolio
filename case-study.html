@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Case Study: Library Management System | Shiva</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg: #0d1117;
+    --panel: #161b22;
+    --border: #232a34;
+    --text: #cdd6e0;
+    --text-dim: #7d8896;
+    --accent: #4fd1a5;
+    --accent-dim: #2f8f6d;
+    --accent-soft: rgba(79,209,165,0.12);
+    --warn: #e0a458;
+    --danger: #e07070;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.7; }
+  a{ color:inherit; text-decoration:none; }
+  ::selection{ background:var(--accent); color:#04140f; }
+
+  .wrap{ max-width:820px; margin:0 auto; padding:0 24px; }
+
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(13,17,23,0.9); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{ max-width:820px; margin:0 auto; padding:16px 24px; display:flex; justify-content:space-between; align-items:center; }
+  .logo{ font-family:var(--mono); font-weight:700; font-size:15px; }
+  .logo span{ color:var(--accent); }
+  .back-link{ font-family:var(--mono); font-size:13px; color:var(--text-dim); }
+  .back-link:hover{ color:var(--accent); }
+
+  header{ padding:140px 0 60px; border-bottom:1px solid var(--border); }
+  .eyebrow{ font-family:var(--mono); font-size:12px; color:var(--accent-dim); text-transform:uppercase; letter-spacing:2px; margin-bottom:14px; }
+  h1{ font-family:var(--mono); font-size:clamp(28px,5vw,42px); font-weight:800; color:#f0f4f8; margin-bottom:18px; line-height:1.2; }
+  .lede{ color:var(--text-dim); font-size:16.5px; max-width:640px; }
+
+  .meta-row{ display:flex; flex-wrap:wrap; gap:28px; margin-top:32px; }
+  .meta-item{ font-family:var(--mono); }
+  .meta-label{ font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+  .meta-val{ font-size:14px; color:var(--accent); }
+
+  section{ padding:64px 0; border-bottom:1px solid var(--border); }
+  .s-num{ font-family:var(--mono); font-size:12px; color:var(--accent-dim); text-transform:uppercase; letter-spacing:2px; margin-bottom:10px; }
+  h2{ font-family:var(--mono); font-size:24px; font-weight:700; color:#f0f4f8; margin-bottom:20px; }
+  p{ color:var(--text-dim); margin-bottom:16px; font-size:15.5px; }
+  strong{ color:var(--text); }
+
+  .arch-diagram{
+    background:var(--panel); border:1px solid var(--border); border-radius:8px;
+    padding:24px; font-family:var(--mono); font-size:12.5px; color:var(--text-dim);
+    overflow-x:auto; white-space:pre; line-height:1.9; margin:20px 0;
+  }
+  .arch-diagram .hl{ color:var(--accent); }
+
+  .problem-grid{ display:grid; gap:16px; margin-top:8px; }
+  .problem-card{
+    background:var(--panel); border:1px solid var(--border); border-left:3px solid var(--danger);
+    border-radius:6px; padding:18px 20px;
+  }
+  .problem-card .p-issue{ font-family:var(--mono); font-size:14px; color:#f0f4f8; margin-bottom:8px; font-weight:700; }
+  .problem-card .p-fix{ font-size:14px; color:var(--text-dim); }
+  .problem-card .p-fix strong{ color:var(--accent); }
+
+  .feature-list{ list-style:none; margin-top:8px; }
+  .feature-list li{
+    font-size:15px; color:var(--text-dim); padding:8px 0;
+    border-bottom:1px dashed var(--border); display:flex; gap:10px;
+  }
+  .feature-list li:last-child{ border-bottom:none; }
+  .feature-list li::before{ content:"▹"; color:var(--accent); }
+
+  .stack-table{ width:100%; border-collapse:collapse; margin-top:8px; font-size:14px; }
+  .stack-table td{ padding:10px 12px; border-bottom:1px solid var(--border); }
+  .stack-table td:first-child{ font-family:var(--mono); color:var(--accent); width:160px; }
+  .stack-table td:last-child{ color:var(--text-dim); }
+
+  .learn-box{
+    background:var(--accent-soft); border:1px solid var(--accent-dim); border-radius:8px;
+    padding:24px; margin-top:8px;
+  }
+  .learn-box p{ color:var(--text); margin-bottom:0; }
+
+  .cta-row{ display:flex; gap:14px; flex-wrap:wrap; margin-top:24px; }
+  .btn{
+    font-family:var(--mono); font-size:13px; font-weight:500; padding:12px 20px;
+    border-radius:6px; border:1px solid var(--border); display:inline-flex; gap:8px;
+  }
+  .btn-primary{ background:var(--accent); color:#04140f; border-color:var(--accent); }
+  .btn-ghost{ color:var(--text); }
+  .btn-ghost:hover{ border-color:var(--accent); color:var(--accent); }
+
+  footer{ text-align:center; padding:32px 0; color:var(--text-dim); font-family:var(--mono); font-size:12px; }
+  footer .accent{ color:var(--accent); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">shiva<span>.dev</span></div>
+    <a class="back-link" href="index.html#projects">&larr; back to portfolio</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Case Study</div>
+    <h1>Library Management System</h1>
+    <p class="lede">
+      A full-stack library system built from the ground up with core Java technologies —
+      no framework shortcuts — to deeply understand authentication, database access, and
+      server-side architecture before moving to Spring Boot.
+    </p>
+    <div class="meta-row">
+      <div class="meta-item"><div class="meta-label">Role</div><div class="meta-val">Solo Developer</div></div>
+      <div class="meta-item"><div class="meta-label">Duration</div><div class="meta-val">Personal Project</div></div>
+      <div class="meta-item"><div class="meta-label">Stack</div><div class="meta-val">Java · React · MySQL</div></div>
+    </div>
+  </header>
+
+  <!-- PROBLEM -->
+  <section>
+    <div class="s-num">01</div>
+    <h2>The Problem</h2>
+    <p>
+      Most beginner Java projects stop at console-based CRUD apps. I wanted to build something
+      closer to a real deployed system: a web app with actual user accounts, permission levels,
+      a persistent database, and business logic that has to handle edge cases — like what happens
+      when a book is returned late, or when a member tries to borrow a book that's already checked out.
+    </p>
+    <p>
+      The goal was a <strong>Library Management System</strong> that a real library could plausibly use:
+      admins manage the catalog and members, while members browse, borrow, and return books —
+      with the system automatically tracking due dates and overdue status.
+    </p>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section>
+    <div class="s-num">02</div>
+    <h2>Architecture</h2>
+    <p>
+      The backend is built on raw <strong>Java Servlets</strong> talking directly to MySQL through
+      <strong>JDBC</strong> — deliberately avoiding Spring at this stage so every layer of the
+      request lifecycle (routing, session handling, SQL, response serialization) had to be
+      understood and wired by hand.
+    </p>
+    <div class="arch-diagram">┌─────────────┐        HTTP/JSON        ┌──────────────────┐
+│  React SPA  │ ──────────────────────▶ │   Servlet Layer  │
+│  (Vite)     │ ◀────────────────────── │  (Controllers)   │
+└─────────────┘                         └────────┬─────────┘
+                                                  │
+                                         ┌────────▼─────────┐
+                                         │   Service Layer  │
+                                         │ (business logic: │
+                                         │  borrow/return,  │
+                                         │  overdue calc)   │
+                                         └────────┬─────────┘
+                                                  │
+                                         ┌────────▼─────────┐
+                                         │   JDBC + DAO    │
+                                         └────────┬─────────┘
+                                                  │
+                                         ┌────────▼─────────┐
+                                         │   <span class="hl">MySQL DB</span>     │
+                                         └──────────────────┘
+
+  Session Auth ──▶ stored server-side, validated per-request
+  BCrypt        ──▶ password hashing before persisting to DB
+  Gson          ──▶ Java objects ⇄ JSON serialization</div>
+    <p>
+      Deployed locally on <strong>Apache Tomcat</strong>, built and dependency-managed with
+      <strong>Maven</strong>. The frontend is a separate React + Vite single-page app that
+      consumes the servlet API over HTTP.
+    </p>
+  </section>
+
+  <!-- FEATURES -->
+  <section>
+    <div class="s-num">03</div>
+    <h2>Key Features</h2>
+    <ul class="feature-list">
+      <li>Role-based access control — distinct Admin and Member views and permissions</li>
+      <li>Session-based authentication with BCrypt-hashed passwords</li>
+      <li>Book CRUD — add, edit, remove, and search catalog entries</li>
+      <li>Borrow/return workflow with availability checks</li>
+      <li>Automated overdue tracking based on due dates</li>
+      <li>Admin dashboard for managing members and monitoring activity</li>
+      <li>Dark, Spotify/Netflix-inspired UI for a polished user experience</li>
+    </ul>
+  </section>
+
+  <!-- CHALLENGES -->
+  <section>
+    <div class="s-num">04</div>
+    <h2>Challenges & Fixes</h2>
+    <p>Building without a framework meant hitting — and solving — problems Spring normally hides:</p>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="p-issue">Session handling across requests</div>
+        <div class="p-fix">Without Spring Security, session state had to be manually validated on every protected servlet endpoint. <strong>Fix:</strong> a shared filter/check at the start of each servlet method to verify session validity before executing logic.</div>
+      </div>
+      <div class="problem-card">
+        <div class="p-issue">Preventing double-borrowing of the same book</div>
+        <div class="p-fix">Two members could try to borrow the last copy at nearly the same time. <strong>Fix:</strong> availability check moved into the same transaction as the borrow insert, so the DB itself enforces the constraint rather than the UI.</div>
+      </div>
+      <div class="problem-card">
+        <div class="p-issue">Password security</div>
+        <div class="p-fix">Storing plain-text passwords is a non-starter. <strong>Fix:</strong> BCrypt hashing on signup, with hash comparison (not plain equality) on login.</div>
+      </div>
+      <div class="problem-card">
+        <div class="p-issue">Manual JSON serialization boilerplate</div>
+        <div class="p-fix">Every servlet response needed consistent JSON output. <strong>Fix:</strong> standardized on Gson across all endpoints to keep request/response shape predictable for the React frontend.</div>
+      </div>
+      <div class="problem-card">
+        <div class="p-issue">Overdue calculation edge cases</div>
+        <div class="p-fix">Naive date subtraction broke on same-day returns and timezone differences. <strong>Fix:</strong> normalized all date handling server-side before calculating overdue days.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STACK -->
+  <section>
+    <div class="s-num">05</div>
+    <h2>Tech Stack Breakdown</h2>
+    <table class="stack-table">
+      <tr><td>Backend</td><td>Java, Servlets, JDBC</td></tr>
+      <tr><td>Frontend</td><td>React, Vite</td></tr>
+      <tr><td>Database</td><td>MySQL</td></tr>
+      <tr><td>Auth</td><td>Session-based, BCrypt password hashing</td></tr>
+      <tr><td>Serialization</td><td>Gson</td></tr>
+      <tr><td>Build & Deploy</td><td>Maven, Apache Tomcat</td></tr>
+      <tr><td>Environment</td><td>IntelliJ IDEA, VS Code, Java 17 (Eclipse Adoptium)</td></tr>
+    </table>
+  </section>
+
+  <!-- LEARNINGS -->
+  <section style="border-bottom:none;">
+    <div class="s-num">06</div>
+    <h2>What This Project Taught Me</h2>
+    <div class="learn-box">
+      <p>
+        Building the auth, session handling, and JSON layer by hand — instead of starting with
+        Spring Boot — made the "magic" behind frameworks make sense. Now that I'm learning
+        Spring Boot, I already understand what problems it's actually solving under the hood:
+        request routing, dependency wiring, security filters, and ORM — rather than treating
+        them as black boxes to memorize.
+      </p>
+    </div>
+    <div class="cta-row">
+      <!-- TODO: replace with your real GitHub repo link -->
+      <a class="btn btn-primary" href="#">View on GitHub ↗</a>
+      <a class="btn btn-ghost" href="index.html#projects">← Back to Portfolio</a>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  built with <span class="accent">Java</span> energy, shipped with HTML/CSS/JS · © 2026 Shiva
+</footer>
+
+</body>
+</html>
